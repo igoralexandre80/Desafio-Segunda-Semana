@@ -1,32 +1,30 @@
 import React, { Component } from 'react';
-import './App.css';
-import Cards from './Cards.js'
-const API_URL = "https://jsonplaceholder.typicode.com/posts";
+import axios from 'axios';
+
+
 
 class App extends Component {
 
+
   // estado inicial
   state = {
-    posts: [],
+    filmes: [],
   }
 
-  componentDidMount() {
-    fetch(API_URL)
-    .then(result => {return result.json()})
-    .then(data => {
-      this.setState({
-        posts: data
-      })
+  async componentDidMount() {
+    const api = await axios.get("https://api.themoviedb.org/3/movie/upcoming?api_key=e5693481ef000bfdd855a0f21ad39631&language=en-US");
+    this.setState({
+      filmes: api.data.results,
     })
   }
 
-  render() {  
-    console.log(this.state.posts);
+
+  render() {
     return (
-      <div>
-        <Cards posts={this.state.posts} />
-      </div>
-    )
+      <ul>
+        {this.state.filmes.map(movie => <li>{movie.title}</li>)}
+      </ul>
+    );
   }
 
 }
